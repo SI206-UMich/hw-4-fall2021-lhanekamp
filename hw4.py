@@ -1,5 +1,11 @@
 
 import unittest
+## Name : Logan Hanekamp
+## Student ID: 14684100
+## Your Email: hanekamp@umich.edu
+## People you worked with : Myself
+## Github URL : https://github.com/SI206-UMich/hw-4-fall2021-lhanekamp
+
 
 # The Customer class
 # The Customer class represents a customer who will order from the stalls.
@@ -28,7 +34,9 @@ class Customer:
     # Submit_order takes a cashier, a stall and an amount as parameters, 
     # it deducts the amount from the customer’s wallet and calls the receive_payment method on the cashier object
     def submit_order(self, cashier, stall, amount): 
-        pass
+        self.wallet -= amount
+        cashier.receive_payment(stall, amount)
+		
 
     # The __str__ method prints the customer's information.    
     def __str__(self):
@@ -72,7 +80,38 @@ class Cashier:
 ## Complete the Stall class here following the instructions in HW_4_instructions_rubric
 class Stall:
     
-    pass
+    def __init__(self, name, inventory = {}, cost = 7, earnings = 0):	
+		self.name = name		
+		self.inventory = inventory
+		self.cost = cost
+		self.earnings = earnings
+
+    def process_order(self, food, quantity):
+		if (food in self.inventory):
+			self.inventory[food] = self.inventory[food] - quantity
+			self.money = self.money + (quantity * self.cost)
+
+
+    def has_item(self, name, quantity):
+		if (self.inventory[name] >= quantity):
+			return True
+		return False
+
+
+    def stock_up(self, food, quantity):		
+			self.inventory[food] = self.inventory.get(food, 0) + quantity
+
+
+    def compute_cost(self, quantity):
+        return (self.cost * quantity)
+
+    def __str__(self):
+		inventory_list = []
+		for key in self.inventory.keys():
+			inventory_list.append(str(key))
+		return "Hello, we are " + self.name + ". This is the current menu " + str(', '.join(inventory_list))+ ".\nWe charge $" + str(self.cost) + " per item. We have $" + str(self.earnings) + " in total."
+
+
 
 
 class TestAllMethods(unittest.TestCase):
@@ -179,7 +218,16 @@ class TestAllMethods(unittest.TestCase):
 ### Write main function
 def main():
     #Create different objects 
+    i1 = {"pancakes": 30, "bacon": 40, "waffels": 25}
+	i2 = {"ice cream": 30, "cookies": 40, "cake": 25}
 
+    c1 = Customer("Janet", 100)
+	c2 = Customer("Cody", 30)
+    c3 = Customer("Bill", 130)
+
+
+	s1 = Stall("24 Hour Breakfast", i1, 14, 200)
+	s2 = Stall("Just Dessert", i2, 7, 160)
     #Try all cases in the validate_order function
     #Below you need to have *each customer instance* try the four cases
     #case 1: the cashier does not have the stall 
